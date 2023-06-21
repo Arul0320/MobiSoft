@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobi Soft</title>
+    <script src="path/to/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="products.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link rel="stylesheet" href="products.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="icon" href="images/logo 1.png"> 
+    <style>
+      .product-item {
+        text-align: center;  
+      width: 300px;  
+      height: auto;  
+      padding-top: 10px;
+      }
+      .buy-button {
+      border: 2px solid black;
+      min-height: 25px;
+      padding-left: 5px;
+      padding-right: 5px;
+      padding-top: 1px;
+      padding-bottom: 2px;
+      /* border-radius: 70px; */
+      }
+      table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+    }
+    .bill {
+      margin-top: 20px;
+    }
+    .bill table {
+      margin-bottom: 10px;
+    }
+    .bill p {
+      text-align: right;
+    }
+    </style>
+</head>
+<body>
+   <div class="main">
+    <div class="navbar">
+        <img src="images/logo 1.png" class="logo">
+    <h1>Welcome to SamSub MobiSoft</h1>
+    <ul>
+        <li><a href="index.html"><b>Home</a></li>
+        <li><a href="addProducts.html">Add Products</a></li>
+       <script></script> <!-- <li><a href="accessories.html">Accessories</b></a></li> -->
+    </ul>
+    </div>  
+    <div id="productList">
+        <h2><b>Product List</b></h2><br>
+        <ul style="width: 100%;
+        height: auto;
+        display: grid ;
+        margin-bottom: 50px;
+        grid-template-columns: 1fr 1fr 1fr;
+        place-items: center;
+        font-weight: bold;" 
+        id="products"></ul> 
+      </div>
+      <!-- <ul id="products"></ul> -->
+      <div style="text-align: center;  
+      width: 200px;  
+      height: 100px;
+      margin-left: 85vh;
+      /* padding-left: 100vh;   */
+      padding-top: 5px;">
+        <button style="border: 2px solid black;
+        min-height: 25px;
+        padding-left: 5px;
+        padding-right: 5px;
+        padding-top: 1px;
+        padding-bottom: 2px;" id="generateBillButton">Generate Bill</button>
+      </div>
+      <div style="text-align: center;" id="bill"></div>
+      
+   </div>
+   <script>
+    function getProductsFromStorage() {
+      const storedProducts = localStorage.getItem("devices");
+      return storedProducts ? JSON.parse(storedProducts) : [];
+    }
+    let devices = getProductsFromStorage();
+    let selectedProducts = {};
+    function renderProductList() {
+      const productList = document.getElementById("products");
+      productList.innerHTML = ""; 
+      for (let i = 0; i < devices.length; i++) {
+        const device = devices[i];
+        const listItem = document.createElement("li");
+        listItem.classList.add("product-item");
+        const image = document.createElement("img");
+        image.src = device.imageUrl;
+        image.alt = device.name;
+        image.width = 250;
+        const namePara = document.createElement("p");
+        namePara.textContent = "Name: " + device.name;
+        const pricePara = document.createElement("p");
+        pricePara.textContent = "Price: $" + device.manufacturer;
+        const buyButton = document.createElement("button");
+        buyButton.textContent = "Buy";
+        buyButton.classList.add("buy-button");
+        buyButton.addEventListener("click", function() {
+          if (selectedProducts[device.id]) {
+            selectedProducts[device.id].quantity++;
+          } else {
+            selectedProducts[device.id] = {
+              name: device.name,
+              price: parseFloat(device.manufacturer),
+              quantity: 1
+            };
+          }
+          console.log("Selected Products:", selectedProducts);
+        });
+        listItem.appendChild(image);
+        listItem.appendChild(namePara);
+        listItem.appendChild(pricePara);
+        listItem.appendChild(buyButton);
+        productList.appendChild(listItem);
+      }
+    }
+    renderProductList();
+    function calculateTotalPrice() {
+      let totalPrice = 0;
+      for (let productId in selectedProducts) {
+        const product = selectedProducts[productId];
+        totalPrice += product.price * product.quantity;
+      }
+      return totalPrice;
+    }
+    function generateBill() {
+      const totalPrice = calculateTotalPrice();
+      let billContent = "<h2>Bill</h2>";
+      billContent += "<table>";
+      billContent += "<tr><th>Product</th><th>Quantity</th><th>Price</th></tr>";
+      for (let productId in selectedProducts) {
+        const product = selectedProducts[productId];
+        billContent += `<tr><td>${product.name}</td><td>${product.quantity}</td><td>$${product.price}</td></tr>`;
+      }
+      billContent += "</table>";
+      billContent += `<p><strong>Total Price: $${totalPrice}</strong></p>`;
+      const billElement = document.getElementById("bill");
+      billElement.innerHTML = billContent; 
+    }
+    const generateBillButton = document.getElementById("generateBillButton");
+    generateBillButton.addEventListener("click", generateBill);
+
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="product.js"></script> 
+</body>
+</html> 

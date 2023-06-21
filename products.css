@@ -1,0 +1,72 @@
+.navbar{
+    width: 85%;
+    margin: auto;
+    padding: 35px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.logo{
+    width: 120px;
+    cursor: pointer;
+}
+.navbar ul li{
+    list-style: none;
+    display: inline-block;
+    margin: 0 20px;
+    position: relative;
+}
+.navbar ul li a{
+    text-decoration: none;
+    color: #060000;
+    text-transform: uppercase;
+}
+
+.navbar ul li a:hover{
+    background-color: rgb(14, 0, 0);
+    color: rgb(255, 251, 251);
+}
+#btn,#btn1{
+    text-decoration: none;
+    color: #fafafa;
+    /* text-transform: uppercase; */
+    background-color: #0f0000;
+    border-radius: 50%;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    border-radius: 50px;
+}
+/* .navbar ul li a:hover{
+    background-color: rgb(70, 4, 250);
+    color: rgb(253, 253, 253);
+} */
+.navbar ul li::after{
+    content: '';
+    height: 3px;
+    width: 100%;
+    background: 009688;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    transition: 0.5s;
+}
+.navbar ul li:hover::after{
+    width: 100%;
+
+}
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.main{
+    width: 100%;
+    height: 100vh;
+    /* background-image: linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.75)),url(https://cdn.wallpapersafari.com/62/0/qhV2JY.jpg); */
+    background-size: cover;
+    background-position: center;
+ /* background-color: wheat; */
+
+}
